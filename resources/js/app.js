@@ -4,7 +4,6 @@ import Alpine from 'alpinejs';
 import Turbolinks from 'turbolinks'
 
 let isFirstRender = true
-
 document.addEventListener('turbolinks:load', () => {
     if (!isFirstRender && window.plausible) {
         window.plausible('pageview')
