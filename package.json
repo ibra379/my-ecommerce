@@ -16,6 +16,11 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "turbolinks": "^5.2.0"
+        "@vitejs/plugin-vue": "^4.4.0",
+        "mitt": "^3.0.1",
+        "tiny-emitter": "^2.1.0",
+        "turbolinks": "^5.2.0",
+        "vue": "^3.2.36",
+        "vue-loader": "^17.3.1"
     }
 }

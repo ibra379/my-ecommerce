@@ -2,31 +2,30 @@ import './bootstrap';
 
 import Alpine from 'alpinejs';
 import Turbolinks from 'turbolinks'
+import {createApp} from "vue";
+import AddToCart from "./components/AddToCart.vue";
+import NavbarCart from "./components/NavbarCart.vue";
 
-let isFirstRender = true
-document.addEventListener('turbolinks:load', () => {
-    if (!isFirstRender && window.plausible) {
-        window.plausible('pageview')
-    }
-    isFirstRender = false;
-})
-document.addEventListener('turbolinks:click', e => {
-    const anchorElement = e.target
-    const isSamePageAnchor =
-        anchorElement.hash &&
-        anchorElement.origin === window.location.origin &&
-        anchorElement.pathname === window.location.pathname
+if (document.body.querySelector('#app')) {
+    document.addEventListener('turbolinks:load', () => {
+        const app = createApp({});
 
-    if (isSamePageAnchor) {
-        Turbolinks.controller.pushHistoryWithLocationAndRestorationIdentifier(e.data.url, Turbolinks.uuid())
-        e.preventDefault()
-        window.dispatchEvent(new Event('hashchange'))
-    }
-})
+        // Global error handler
+        app.config.errorHandler = (err, instance, info) => {
+            // Handle the error globally
+            console.error("Global error:", err);
+            console.log("Vue instance:", instance);
+            console.log("Error info:", info);
+            // Add code for UI notifications, reporting or other error handling logic
+        };
+
+        app.component('AddToCart', AddToCart);
+        app.component('NavbarCart', NavbarCart);
+        app.mount('#app');
+    })
+}
 
 
 window.Alpine = Alpine;
-
 Alpine.start();
-
 Turbolinks.start();
