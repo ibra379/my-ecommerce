@@ -1,3 +1,5 @@
+@props(['stripe'])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -19,6 +21,10 @@
                 @apply bg-red-500;
             }
         </style>
+        @if(!empty($stripe))
+            <script src="https://js.stripe.com/v3/"></script>
+{{--            <script src="checkout.js" defer></script>--}}
+        @endif
     </head>
     <body class="font-sans antialiased">
         <div  id="app" class="min-h-screen bg-gray-100 dark:bg-gray-900">

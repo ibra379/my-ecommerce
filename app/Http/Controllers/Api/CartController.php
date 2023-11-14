@@ -5,51 +5,63 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Repositories\CartRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    public function __construct(private readonly CartRepository $cartRepository)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
-
-    public function count(CartRepository $cartRepository)
+    public function index(): JsonResponse
     {
         return response()->json([
-            'count' => $cartRepository->count()
+            'cartContent' => $this->cartRepository->content()
+        ]);
+    }
+
+    public function count(): JsonResponse
+    {
+        return response()->json([
+            'count' => $this->cartRepository->count()
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, CartRepository $cartRepository)
+    public function store(Request $request): JsonResponse
     {
         $product = Product::whereId($request->input('productId'))->first();
 
         return response()->json([
-            'count' => $cartRepository->add($product)
+            'count' => $this->cartRepository->add($product)
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function increase(int $id)
     {
-        //
+        $this->cartRepository->increase($id);
+        return response()->json([
+            'cartContent' => $this->cartRepository->content(),
+            'cartCount' => $this->cartRepository->count()
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function decrease(int $id)
     {
-        //
+        $this->cartRepository->decrease($id);
+        return response()->json([
+            'cartContent' => $this->cartRepository->content(),
+            'cartCount' => $this->cartRepository->count()
+        ]);
     }
 
     /**
@@ -57,6 +69,10 @@ class CartController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->cartRepository->remove($id);
+        return response()->json([
+            'cartContent' => $this->cartRepository->content(),
+            'cartCount' => $this->cartRepository->count()
+        ]);
     }
 }

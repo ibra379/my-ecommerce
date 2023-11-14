@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShoppingCartController;
+use App\Http\Controllers\StripeCheckout2Controller;
+use App\Http\Controllers\StripeCheckoutController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,7 +27,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('checkout', [StripeCheckoutController::class, 'create']);
+Route::get('paymentIntent', [StripeCheckoutController::class, 'paymentIntent']);
 
+//GRAFIKART
+Route::get('stripe/pay', [StripeCheckout2Controller::class, 'paymentIntent']);
+Route::match(['get', 'post'],'stripe/webhook', [StripeCheckout2Controller::class, 'webhook']);
+//ENDGRAFIKART
+
+Route::get('shoppingCart', ShoppingCartController::class);
 Route::get('products', [ProductController::class, 'index'])->name('products');
 
 Route::middleware('auth')->group(function () {

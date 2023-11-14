@@ -1,15 +1,21 @@
 <script setup>
 import useProducts from "../composables/Products/index.js";
 import emitter from 'tiny-emitter/instance';
+import {inject} from "vue";
 
+const toast = inject('toast')
 const {add} = useProducts();
 
 const productId = defineProps(['product-id']);
 
-async function addToCart(){
-    const {data} = await add(productId);
-
-    emitter.emit('product-add', data.count)
+async function addToCart() {
+    axios.get('/sanctum/csrf-cookie').then(async (res) => {
+        const {data} = await add(productId);
+        emitter.emit('product-add', data.count || 0);
+    }).catch(() => {
+        console.log('sdafasd')
+        toast.error('Merci de vous connecter pour rajouter un produit!');
+    });
 }
 </script>
 
@@ -23,7 +29,3 @@ async function addToCart(){
         </button>
     </div>
 </template>
-
-<style scoped>
-
-</style>

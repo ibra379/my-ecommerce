@@ -30,6 +30,6 @@ class Product extends Model
 
     public function getFormatedPriceAttribute(): string
     {
-        return str_replace('.', ',', $this->price / 100);
+        return str_replace('.', ',', $this->price / 100) . ' €';
     }
 }
